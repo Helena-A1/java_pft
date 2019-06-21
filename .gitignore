@@ -1,7 +1,10 @@
 .gradle
 /build/
 .idea
-
+/.idea
+.idea/
+/.idea/
+/java_pft_sandbox/.idea/workspace.xml
 # Ignore Gradle GUI config
 gradle-app.setting
 

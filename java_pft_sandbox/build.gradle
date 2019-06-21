@@ -4,5 +4,5 @@ plugins {
 }
 sourceCompatibility = 1.8
 application {
-    mainClassName = 'MyFirstProgram'
+    mainClassName = 'ru.stqa.pft.sandbox.MyFirstProgram'
 }

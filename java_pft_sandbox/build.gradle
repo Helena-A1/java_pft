@@ -7,3 +7,12 @@ sourceCompatibility = 1.8
 application {
     mainClassName = 'ru.stqa.pft.sandbox.MyFirstProgram'
 }
+
+
+repositories {
+    mavenCentral()
+}
+dependencies {
+    // https://mvnrepository.com/artifact/org.testng/testng
+    testCompile group: 'org.testng', name: 'testng', version: '6.14.3'
+}

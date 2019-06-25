@@ -11,8 +11,9 @@ application {
 
 repositories {
     mavenCentral()
+
 }
 dependencies {
-   
-    testCompile group: 'org.testng', name: 'testng', version: '6.14.3'
+
+        implementation 'org.testng:testng:6.14.3'
 }

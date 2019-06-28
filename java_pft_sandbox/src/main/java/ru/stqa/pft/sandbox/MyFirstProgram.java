@@ -23,7 +23,7 @@ public class MyFirstProgram {
     System.out.println(" Тoчка p2 имеет координаты " + p2.x + " и " + p2.y);
 
     // использование функции для нахождения расстояния
-    System.out.println(" Расстояние между точками равно " + Point.distance(p1,p2));
+    System.out.println(" Расстояние между точками равно " + p1.distance(p2,p2));
 
     // использование метода для нахождения расстояния
     System.out.println(" Расстояние между точками равно " + p1.distance(p2));

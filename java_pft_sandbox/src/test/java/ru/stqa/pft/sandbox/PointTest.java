@@ -10,7 +10,7 @@ public class PointTest {
    Point p2 = new Point(3, 4);
 
 //check that the distance value equals expected result
-   Assert.assertEquals(p1.distance(p1, p2), 5.0);
+   Assert.assertEquals(p1.distance(p2), 5.0);
  }
 
   //check that the distance from p1 to p2 equals the backwards distance
@@ -19,7 +19,7 @@ public class PointTest {
    Point p1 = new Point(0, 0);
    Point p2 = new Point(3, 4);
 
-   Assert.assertEquals(p1.distance(p1, p2), p1.distance(p2, p1));
+   Assert.assertEquals(p1.distance(p2), p2.distance(p1));
  }
 
 
@@ -30,7 +30,7 @@ public class PointTest {
     Point p1 = new Point(0, 0);
     Point p2 = new Point(3, 4);
 
-    Assert.assertEquals(p1.distance(p1, p1), 0.0);
+    Assert.assertEquals(p1.distance(p1), 0.0);
  }
 
 

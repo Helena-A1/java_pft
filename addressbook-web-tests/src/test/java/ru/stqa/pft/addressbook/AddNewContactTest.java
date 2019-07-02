@@ -1,14 +1,11 @@
 package ru.stqa.pft.addressbook;
 
-import java.util.regex.Pattern;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.annotations.*;
 import static org.testng.Assert.*;
 import org.openqa.selenium.*;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.support.ui.Select;
 
 public class AddNewContactTest {
   private WebDriver driver;
@@ -21,18 +18,23 @@ public class AddNewContactTest {
     driver = new ChromeDriver();
     baseUrl = "https://www.katalon.com/";
     driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+    login("admin", "secret");
+  }
+
+  private void login(String user, String pass) {
+    driver.get("http://localhost/addressbook/");
+    driver.findElement(By.name("user")).click();
+    driver.findElement(By.name("user")).clear();
+    driver.findElement(By.name("user")).sendKeys(user);
+    driver.findElement(By.name("pass")).click();
+    driver.findElement(By.name("pass")).clear();
+    driver.findElement(By.name("pass")).sendKeys(pass);
+    driver.findElement(By.xpath("//input[@value='Login']")).click();
   }
 
   @Test
   public void testAddNewContact() throws Exception {
-    driver.get("http://localhost/addressbook/");
-    driver.findElement(By.name("user")).click();
-    driver.findElement(By.name("user")).clear();
-    driver.findElement(By.name("user")).sendKeys("admin");
-    driver.findElement(By.name("pass")).click();
-    driver.findElement(By.name("pass")).clear();
-    driver.findElement(By.name("pass")).sendKeys("secret");
-    driver.findElement(By.xpath("//input[@value='Login']")).click();
+
     driver.findElement(By.linkText("add new")).click();
     driver.findElement(By.name("firstname")).click();
     driver.findElement(By.name("firstname")).clear();

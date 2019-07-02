@@ -36,7 +36,7 @@ public class AddNewContactTest {
   public void testAddNewContact() throws Exception {
 
     gotoAddNew();
-    fillContactForm("TestName", "Contact", "Java_pft", "pft", "tester", "Software-Testing", "some address", "12345678", "software-testing@gmail.ru");
+    fillContactForm(new ContactData("TestName", "Contact", "Java_pft", "pft", "tester", "Software-Testing", "some address", "12345678", "software-testing@gmail.ru"));
     SubmitContactCreation();
     gotoHomepage();
   }
@@ -49,34 +49,34 @@ public class AddNewContactTest {
     driver.findElement(By.name("submit")).click();
   }
 
-  private void fillContactForm(String name, String midName, String surname, String nick, String postTitle, String employer1, String address, String phone, String email) {
+  private void fillContactForm(ContactData contactData) {
     driver.findElement(By.name("firstname")).click();
     driver.findElement(By.name("firstname")).clear();
-    driver.findElement(By.name("firstname")).sendKeys(name);
+    driver.findElement(By.name("firstname")).sendKeys(contactData.getName());
     driver.findElement(By.name("middlename")).click();
     driver.findElement(By.name("middlename")).clear();
-    driver.findElement(By.name("middlename")).sendKeys(midName);
+    driver.findElement(By.name("middlename")).sendKeys(contactData.getMidName());
     driver.findElement(By.name("lastname")).click();
     driver.findElement(By.name("lastname")).clear();
-    driver.findElement(By.name("lastname")).sendKeys(surname);
+    driver.findElement(By.name("lastname")).sendKeys(contactData.getSurname());
     driver.findElement(By.name("nickname")).click();
     driver.findElement(By.name("nickname")).clear();
-    driver.findElement(By.name("nickname")).sendKeys(nick);
+    driver.findElement(By.name("nickname")).sendKeys(contactData.getNick());
     driver.findElement(By.name("title")).click();
     driver.findElement(By.name("title")).clear();
-    driver.findElement(By.name("title")).sendKeys(postTitle);
+    driver.findElement(By.name("title")).sendKeys(contactData.getPostTitle());
     driver.findElement(By.name("company")).click();
     driver.findElement(By.name("company")).clear();
-    driver.findElement(By.name("company")).sendKeys(employer1);
+    driver.findElement(By.name("company")).sendKeys(contactData.getEmployer1());
     driver.findElement(By.name("address")).click();
     driver.findElement(By.name("address")).clear();
-    driver.findElement(By.name("address")).sendKeys(address);
+    driver.findElement(By.name("address")).sendKeys(contactData.getAddress());
     driver.findElement(By.name("home")).click();
     driver.findElement(By.name("home")).clear();
-    driver.findElement(By.name("home")).sendKeys(phone);
+    driver.findElement(By.name("home")).sendKeys(contactData.getPhone());
     driver.findElement(By.name("email")).click();
     driver.findElement(By.name("email")).clear();
-    driver.findElement(By.name("email")).sendKeys(email);
+    driver.findElement(By.name("email")).sendKeys(contactData.getEmail());
   }
 
   private void gotoAddNew() {

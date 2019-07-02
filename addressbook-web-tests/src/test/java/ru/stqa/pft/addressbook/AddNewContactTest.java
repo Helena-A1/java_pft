@@ -35,36 +35,52 @@ public class AddNewContactTest {
   @Test
   public void testAddNewContact() throws Exception {
 
-    driver.findElement(By.linkText("add new")).click();
+    gotoAddNew();
+    fillContactForm("TestName", "Contact", "Java_pft", "pft", "tester", "Software-Testing", "some address", "12345678", "software-testing@gmail.ru");
+    SubmitContactCreation();
+    gotoHomepage();
+  }
+
+  private void gotoHomepage() {
+    driver.findElement(By.linkText("home page")).click();
+  }
+
+  private void SubmitContactCreation() {
+    driver.findElement(By.name("submit")).click();
+  }
+
+  private void fillContactForm(String name, String midName, String surname, String nick, String postTitle, String employer1, String address, String phone, String email) {
     driver.findElement(By.name("firstname")).click();
     driver.findElement(By.name("firstname")).clear();
-    driver.findElement(By.name("firstname")).sendKeys("TestName");
+    driver.findElement(By.name("firstname")).sendKeys(name);
     driver.findElement(By.name("middlename")).click();
     driver.findElement(By.name("middlename")).clear();
-    driver.findElement(By.name("middlename")).sendKeys("Contact");
+    driver.findElement(By.name("middlename")).sendKeys(midName);
     driver.findElement(By.name("lastname")).click();
     driver.findElement(By.name("lastname")).clear();
-    driver.findElement(By.name("lastname")).sendKeys("Java_pft");
+    driver.findElement(By.name("lastname")).sendKeys(surname);
     driver.findElement(By.name("nickname")).click();
     driver.findElement(By.name("nickname")).clear();
-    driver.findElement(By.name("nickname")).sendKeys("pft");
+    driver.findElement(By.name("nickname")).sendKeys(nick);
     driver.findElement(By.name("title")).click();
     driver.findElement(By.name("title")).clear();
-    driver.findElement(By.name("title")).sendKeys("tester");
+    driver.findElement(By.name("title")).sendKeys(postTitle);
     driver.findElement(By.name("company")).click();
     driver.findElement(By.name("company")).clear();
-    driver.findElement(By.name("company")).sendKeys("Software-Testing");
+    driver.findElement(By.name("company")).sendKeys(employer1);
     driver.findElement(By.name("address")).click();
     driver.findElement(By.name("address")).clear();
-    driver.findElement(By.name("address")).sendKeys("some address");
+    driver.findElement(By.name("address")).sendKeys(address);
     driver.findElement(By.name("home")).click();
     driver.findElement(By.name("home")).clear();
-    driver.findElement(By.name("home")).sendKeys("12345678");
+    driver.findElement(By.name("home")).sendKeys(phone);
     driver.findElement(By.name("email")).click();
     driver.findElement(By.name("email")).clear();
-    driver.findElement(By.name("email")).sendKeys("software-testing@gmail.ru");
-    driver.findElement(By.name("submit")).click();
-    driver.findElement(By.linkText("home page")).click();
+    driver.findElement(By.name("email")).sendKeys(email);
+  }
+
+  private void gotoAddNew() {
+    driver.findElement(By.linkText("add new")).click();
   }
 
   @AfterClass(alwaysRun = true)

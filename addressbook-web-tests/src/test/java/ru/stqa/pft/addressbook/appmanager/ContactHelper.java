@@ -46,6 +46,16 @@ public class ContactHelper {
   }
 
 
+  public void initContactModification() {
+    wd.findElement(By.xpath("//img[@alt='Edit']")).click();
+  }
 
+  public void submitContactModification() {
+    wd.findElement(By.name("update")).click();
+  }
+
+  public void gotoDetailsPage() {
+    wd.findElement(By.xpath("//img[@alt='Details']")).click();
+  }
 
 }

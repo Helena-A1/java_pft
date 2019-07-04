@@ -7,7 +7,6 @@ public class SessionHelper {
   public WebDriver wd;
 
   public SessionHelper(WebDriver wd) {
-
     this.wd = wd;
   }
 

@@ -14,8 +14,4 @@ public class AddNewContactTest extends TestBase {
     app.getNavigationHelper().gotoHomepage();
   }
 
-
-
-
-
 }

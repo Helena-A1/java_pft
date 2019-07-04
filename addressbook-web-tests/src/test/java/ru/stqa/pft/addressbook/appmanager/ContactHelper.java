@@ -58,4 +58,7 @@ public class ContactHelper {
     wd.findElement(By.xpath("//img[@alt='Details']")).click();
   }
 
+  public void submitDeleteContact() {
+    wd.findElement(By.xpath("(//input[@name='update'])[3]")).click();
+  }
 }

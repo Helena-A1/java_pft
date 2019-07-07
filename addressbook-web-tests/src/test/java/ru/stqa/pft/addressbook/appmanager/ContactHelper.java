@@ -59,6 +59,18 @@ public class ContactHelper {
   }
 
   public void submitDeleteContact() {
-    wd.findElement(By.xpath("(//input[@name='update'])[3]")).click();
+    wd.findElement(By.xpath("//input[@value='Delete']")).click();
   }
+
+
+  public void findContact() {
+    wd.findElement(By.id("21")).click();
+  }
+
+
+  public void closeSubmitModal() {
+    wd.switchTo().alert().accept();
+  }
+
+
 }

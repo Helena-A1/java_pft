@@ -11,13 +11,13 @@ public class TestBase {
 
 
   @BeforeClass(alwaysRun = true)
-  public void setUp() throws Exception {
+  public void setUp()  {
     app.init();
   }
 
 
   @AfterClass(alwaysRun = true)
-  public void tearDown() throws Exception {
+  public void tearDown()  {
     app.stop();
 
   }

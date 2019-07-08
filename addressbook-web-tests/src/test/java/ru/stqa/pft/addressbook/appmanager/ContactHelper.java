@@ -64,7 +64,7 @@ public class ContactHelper {
 
 
   public void findContact() {
-    wd.findElement(By.id("21")).click();
+    wd.findElement(By.xpath("//*[@id='maintable']/tbody/tr[2]/td[1]")).click();
   }
 
 

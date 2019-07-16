@@ -5,6 +5,7 @@ import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import ru.stqa.pft.addressbook.model.ContactData;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ContactHelper extends HelperBase {
@@ -59,7 +60,7 @@ public class ContactHelper extends HelperBase {
 
 
   public void findContact(int index) {
-    wd.findElements(By.xpath("//*[@id='maintable']/tbody/tr[2]/td[1]")).get(index).click();
+    wd.findElements(By.name("selected[]")).get(index).click();
 
   }
 
@@ -97,5 +98,18 @@ public class ContactHelper extends HelperBase {
 
   public void verifyDeleted() {
     wd.findElement(By.cssSelector("div.msgbox"));
+  }
+
+  public List<ContactData> getContactList() {
+    List<ContactData> contacts = new ArrayList<ContactData>();
+    List<WebElement> elements = wd.findElements(By.xpath("//*[@name='entry']"));
+    for (WebElement element: elements) {
+      String name = element.getText();
+      ContactData contact = new ContactData(name, null, null, null, null, null, null, null, null, null);
+      contacts.add(contact);
+    }
+
+    return contacts;
+
   }
 }

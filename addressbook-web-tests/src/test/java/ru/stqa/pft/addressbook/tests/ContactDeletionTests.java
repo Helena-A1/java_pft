@@ -16,7 +16,7 @@ public class ContactDeletionTests extends TestBase {
       app.getContactHelper().createContact(new ContactData("TestName", "Contact", "Java_pft", "pft", "tester", "Software-Testing", "some address", "12345678", "software-testing@gmail.ru", "test1"));
       before++;
     }
-    app.getContactHelper().findContact(0);
+    app.getContactHelper().findContact(before -1);
     app.getContactHelper().submitDeleteContact();
     app.getContactHelper().closeSubmitModal();
     app.getContactHelper().verifyDeleted();

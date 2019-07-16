@@ -12,7 +12,7 @@ public class ContactModificationTests extends TestBase {
     if (!app.getContactHelper().isThereAContact()) {
       app.getContactHelper().createContact(new ContactData("TestName", "Contact", "Java_pft", "pft", "tester", "Software-Testing", "some address", "12345678", "software-testing@gmail.ru", "test1"));
     }
-    app.getContactHelper().initContactModification();
+    app.getContactHelper().initContactModification(before - 1);
     app.getContactHelper().fillContactForm(new ContactData("Updated TestName", "Updated Contact", "Updated Java_pft", "pft", "tester", "Software-Testing", "some address", "12345678", "software-testing@gmail.ru", null), false);
     app.getContactHelper().submitContactModification();
     app.getNavigationHelper().gotoHomepage();

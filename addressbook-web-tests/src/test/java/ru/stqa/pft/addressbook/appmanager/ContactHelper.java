@@ -39,8 +39,9 @@ public class ContactHelper extends HelperBase {
 
 
 
-  public void initContactModification() {
-    click(By.xpath("//img[@alt='Edit']"));
+  public void initContactModification(int index) {
+    wd.findElements(By.xpath("//img[@alt='Edit']")).get(index).click();
+
   }
 
   public void submitContactModification() {
@@ -52,13 +53,14 @@ public class ContactHelper extends HelperBase {
   }
 
   public void submitDeleteContact() {
-    List<WebElement> elements = wd.findElements(By.xpath("//input[@value='Delete']"));
+    wd.findElements(By.xpath("//input[@value='Delete']"));
     click(By.xpath("//input[@value='Delete']"));
   }
 
 
   public void findContact(int index) {
-    click(By.xpath("//*[@id='maintable']/tbody/tr[2]/td[1]"));
+    wd.findElements(By.xpath("//*[@id='maintable']/tbody/tr[2]/td[1]")).get(index).click();
+
   }
 
 

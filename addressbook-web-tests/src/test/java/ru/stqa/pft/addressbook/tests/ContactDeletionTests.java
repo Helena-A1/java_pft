@@ -10,16 +10,16 @@ public class ContactDeletionTests extends TestBase {
   public void testContactDeletion()  {
 
    // app.getContactHelper().initContactModification();
-   // app.getContactHelper().submitDeleteContact();
+    // app.getContactHelper().submitDeleteContact();
     int before = app.getContactHelper().getContactCount();
-     if (! app.getContactHelper().isThereAContact()) {
-
-       app.getContactHelper().createContact(new ContactData("TestName", "Contact", "Java_pft", "pft", "tester", "Software-Testing", "some address", "12345678", "software-testing@gmail.ru", "test1"));
-
-     }
-    app.getContactHelper().findContact();
+    if (! app.getContactHelper().isThereAContact()) {
+      app.getContactHelper().createContact(new ContactData("TestName", "Contact", "Java_pft", "pft", "tester", "Software-Testing", "some address", "12345678", "software-testing@gmail.ru", "test1"));
+      before++;
+    }
+    app.getContactHelper().findContact(0);
     app.getContactHelper().submitDeleteContact();
     app.getContactHelper().closeSubmitModal();
+    app.getContactHelper().verifyDeleted();
     app.getNavigationHelper().goHomeByLink();
     int after = app.getContactHelper().getContactCount();
     Assert.assertEquals(after, before - 1);

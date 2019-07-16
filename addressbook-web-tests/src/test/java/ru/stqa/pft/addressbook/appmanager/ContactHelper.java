@@ -1,11 +1,11 @@
 package ru.stqa.pft.addressbook.appmanager;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import ru.stqa.pft.addressbook.model.ContactData;
+
+import java.util.List;
 
 public class ContactHelper extends HelperBase {
 
@@ -52,11 +52,12 @@ public class ContactHelper extends HelperBase {
   }
 
   public void submitDeleteContact() {
+    List<WebElement> elements = wd.findElements(By.xpath("//input[@value='Delete']"));
     click(By.xpath("//input[@value='Delete']"));
   }
 
 
-  public void findContact() {
+  public void findContact(int index) {
     click(By.xpath("//*[@id='maintable']/tbody/tr[2]/td[1]"));
   }
 
@@ -85,10 +86,14 @@ public class ContactHelper extends HelperBase {
   }
 
   public boolean isThereAContact() {
-      return isElementPresent(By.xpath("//*[@id='maintable']/tbody/tr[2]/td[1]"));
+      return isElementPresent(By.name("selected[]"));
   }
 
   public int getContactCount() {
     return wd.findElements(By.name("selected[]")).size();
+  }
+
+  public void verifyDeleted() {
+    wd.findElement(By.cssSelector("div.msgbox"));
   }
 }

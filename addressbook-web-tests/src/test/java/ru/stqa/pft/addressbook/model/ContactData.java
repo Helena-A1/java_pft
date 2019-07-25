@@ -3,31 +3,28 @@ package ru.stqa.pft.addressbook.model;
 import java.util.Objects;
 
 public class ContactData {
-  private int id;
-  private final String name;
-  private final String midName;
-  private final String surname;
-  private final String nick;
-  private final String postTitle;
-  private final String employer1;
-  private final String address;
-  private final String phone;
-  private final String email;
-  private String group;
+  private int id = Integer.MAX_VALUE;
+  private String name;
+  private String midName;
+  private String surname;
+  private String nick;
+  private String postTitle;
+  private String employer1;
+  private String address;
+  private String phone;
 
 
-  public ContactData(int id, String name, String midName, String surname, String nick, String postTitle, String employer1, String address, String phone, String email, String group) {
+  private String email;
+  public String group;
+
+
+  public int getId() {
+    return id;
+  }
+
+  public ContactData withId(int id) {
     this.id = id;
-    this.name = name;
-    this.midName = midName;
-    this.surname = surname;
-    this.nick = nick;
-    this.postTitle = postTitle;
-    this.employer1 = employer1;
-    this.address = address;
-    this.phone = phone;
-    this.email = email;
-    this.group = group;
+    return this;
   }
 
   @Override
@@ -35,35 +32,64 @@ public class ContactData {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     ContactData that = (ContactData) o;
-    return Objects.equals(name, that.name) &&
+    return id == that.id &&
+            Objects.equals(name, that.name) &&
             Objects.equals(surname, that.surname);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, surname);
+    return Objects.hash(id, name, surname);
   }
 
-  public ContactData(String name, String midName, String surname, String nick, String postTitle, String employer1, String address, String phone, String email, String group) {
-    this.id = Integer.MAX_VALUE;
+  public ContactData withName(String name) {
     this.name = name;
+    return this;
+  }
+
+  public ContactData withMidName(String midName) {
     this.midName = midName;
+    return this;
+  }
+
+  public ContactData withSurname(String surname) {
     this.surname = surname;
+    return this;
+  }
+
+  public ContactData withNic(String nick) {
     this.nick = nick;
+    return this;
+  }
+
+  public ContactData withPosition(String postTitle) {
     this.postTitle = postTitle;
+    return this;
+  }
+
+  public ContactData withEmployer1(String employer1) {
     this.employer1 = employer1;
+    return this;
+  }
+
+  public ContactData withAddress(String address) {
     this.address = address;
+    return this;
+  }
+
+  public ContactData withPhone(String phone) {
     this.phone = phone;
+    return this;
+  }
+
+  public ContactData withEmail(String email) {
     this.email = email;
+    return this;
+  }
+
+  public ContactData withGroup(String group) {
     this.group = group;
-  }
-
-  public int getId() {
-    return id;
-  }
-
-  public void setId(int id) {
-    this.id = id;
+    return this;
   }
 
   @Override

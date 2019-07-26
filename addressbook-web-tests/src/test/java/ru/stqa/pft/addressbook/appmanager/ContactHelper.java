@@ -53,7 +53,7 @@ public class ContactHelper extends HelperBase {
 
   }
   public void startModifyById(int id) {
-    wd.findElement(By.xpath("//*[@id=\"maintable\"]/tbody/tr[3]/td[8]/a")).click();
+    wd.findElement(By.xpath("//a[@href='edit.php?id=" + id + "']")).click();
 
   }
 

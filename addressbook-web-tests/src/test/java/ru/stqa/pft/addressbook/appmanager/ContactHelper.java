@@ -87,6 +87,7 @@ public class ContactHelper extends HelperBase {
     gotoAddNew();
     fillContactForm(contact, true);
     submitContactCreation();
+    contactCache = null;
     gotoHomepage();
   }
 
@@ -96,6 +97,7 @@ public class ContactHelper extends HelperBase {
     submitContactModification();
     gotoHomepage();
     gotoDetailsPage();
+    contactCache = null;
     goHomeByLink();
   }
 
@@ -105,6 +107,7 @@ public class ContactHelper extends HelperBase {
     submit();
    closeModal();
    verifyDeleted();
+   contactCache = null;
    goHomeByLink();
   }
 
@@ -113,6 +116,7 @@ public class ContactHelper extends HelperBase {
     submit();
     closeModal();
     verifyDeleted();
+    contactCache = null;
     goHomeByLink();
   }
 
@@ -144,6 +148,8 @@ public class ContactHelper extends HelperBase {
     wd.findElement(By.cssSelector("div.msgbox"));
   }
 
+
+
   public List<ContactData> list() {
     List<ContactData> contacts = new ArrayList<ContactData>();
     List<WebElement> elements = wd.findElements(By.xpath("//*[@name='entry']"));
@@ -158,19 +164,23 @@ public class ContactHelper extends HelperBase {
     return contacts;
 
   }
+  private Contacts contactCache = null;
 
   public Contacts all() {
-    Contacts contacts = new Contacts();
+    if (contactCache !=null) {
+      return new Contacts(contactCache);
+    }
+    contactCache = new Contacts();
     List<WebElement> elements = wd.findElements(By.xpath("//*[@name='entry']"));
     for (WebElement element : elements) {
       String name = element.findElement(By.xpath(".//td[3]")).getText();
       String surname = element.findElement(By.xpath(".//td[2]")).getText();
       int id = Integer.parseInt(element.findElement(By.tagName("input")).getAttribute("value"));
       ContactData contact = new ContactData().withId(id).withName(name).withSurname(surname);
-      contacts.add(contact);
+      contactCache.add(contact);
     }
 
-    return contacts;
+    return new Contacts((contactCache));
   }
 
 

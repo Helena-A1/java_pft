@@ -14,11 +14,39 @@ public class ContactData {
   private String phone;
   private String mobile;
   private String workPhone;
-
-
-
+  private String allPhones;
   private String email;
-  public String group;
+  private String email2;
+  private String email3;
+  private String allEmails;
+  private String group;
+
+
+  public String getAllEmails() {
+    return allEmails;
+  }
+
+  public ContactData withAllEmails(String allEmails) {
+    this.allEmails = allEmails;
+    return this;
+  }
+
+
+
+  public String getAllPhones() {
+    return allPhones;
+  }
+
+  public ContactData withAllPhones(String allPhones) {
+    this.allPhones = allPhones;
+    return  this;
+  }
+
+
+
+
+  public ContactData() {
+  }
 
 
   public int getId() {
@@ -104,6 +132,15 @@ public class ContactData {
     this.workPhone = workPhone;
     return this;
   }
+  public ContactData withEmail2(String email2) {
+    this.email2 = email2;
+    return this;
+  }
+
+  public ContactData withEmail3(String email3) {
+    this.email3 = email3;
+    return this;
+  }
 
   @Override
   public String toString() {
@@ -154,7 +191,21 @@ public class ContactData {
     return group;
   }
 
-  public String getMobile() { return  mobile; }
+  public String getMobile() {
+    return mobile;
+  }
 
-  public String getWorkPhone() { return  workPhone; }
+  public String getWorkPhone() {
+    return workPhone;
+  }
+
+  public String getEmail2() {
+    return email2;
+  }
+
+  public String getEmail3() {
+    return email3;
+  }
+
+
 }

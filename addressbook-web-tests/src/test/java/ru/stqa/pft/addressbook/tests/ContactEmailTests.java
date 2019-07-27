@@ -1,6 +1,5 @@
 package ru.stqa.pft.addressbook.tests;
 
-import org.hamcrest.MatcherAssert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import ru.stqa.pft.addressbook.model.ContactData;
@@ -11,14 +10,15 @@ import java.util.stream.Collectors;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class ContactPhoneTests extends TestBase {
+public class ContactEmailTests extends TestBase {
 
   @BeforeMethod
   public void ensurePreconditions() {
     app.contact().gotoHomepage();
     if (app.contact().all().size() == 0) {
       app.contact().create(new ContactData()
-              .withName("TestName").withMidName("Contact").withPhone("11111").withMobile("222222").withWorkPhone("3333333"), true);
+              .withName("TestName").withMidName("Contact").withPhone("11111").withMobile("222222").withWorkPhone("3333333")
+              .withEmail("software@gmail.com").withEmail2("Software2@gmail.com").withEmail3("sofware3@gmail.com"), true);
     }
   }
   @Test(enabled = true)
@@ -27,20 +27,22 @@ public class ContactPhoneTests extends TestBase {
     ContactData contact = app.contact().all().iterator().next();
     ContactData contactInfoFromEditForm = app.contact().infoFromEditForm(contact);
 
-    assertThat(contact.getAllPhones(), equalTo(mergePhones(contactInfoFromEditForm)));
+    assertThat(contact.getAllEmails(), equalTo(mergeEmails(contactInfoFromEditForm)));
 
   }
 
-  private String mergePhones(ContactData contact) {
-    return  Arrays.asList(contact.getPhone(),contact.getMobile(), contact.getWorkPhone())
+  private String mergeEmails(ContactData contact) {
+    return  Arrays.asList(contact.getEmail(),contact.getEmail2(), contact.getEmail3())
             .stream().filter((s) -> ! s.equals(""))
             .map(ContactPhoneTests::cleaned)
             .collect(Collectors.joining("\n"));
 
   }
 
-  public static String cleaned(String phone) {
-    return phone.replaceAll("\\s", "").replaceAll("[-()]", "");
+  public static String cleaned(String email) {
+    return email.replaceAll("\\s", "").replaceAll("[-()@.]", "");
   }
 
 }
+
+

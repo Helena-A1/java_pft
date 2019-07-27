@@ -22,6 +22,8 @@ public class AddNewContactTest extends TestBase {
             .withEmployer1("Software-Testing")
             .withAddress( "some address")
             .withPhone("12345678")
+            .withMobile("33-33-33")
+            .withWorkPhone("44 444 444 444")
             .withEmail("software-testing@gmail.ru")
             .withGroup( "test1");
     app.contact().create(contact,false);

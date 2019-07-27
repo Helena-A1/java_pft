@@ -23,7 +23,7 @@ public class ContactDeletionTests extends TestBase {
 
   public void ensurePreconditions() {
     app.goTo().goHomeByLink();
-    if (app.contact().list().size() == 0) {
+    if (app.contact().all().size() == 0) {
       app.contact().create(new ContactData().withName("TestName").withMidName("Contact").withSurname("Java_pft").withGroup("test1"), true);
 
     }

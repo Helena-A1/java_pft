@@ -12,6 +12,9 @@ public class ContactData {
   private String employer1;
   private String address;
   private String phone;
+  private String mobile;
+  private String workPhone;
+
 
 
   private String email;
@@ -92,6 +95,16 @@ public class ContactData {
     return this;
   }
 
+  public ContactData withMobile(String mobile) {
+    this.mobile = mobile;
+    return this;
+  }
+
+  public ContactData withWorkPhone(String workPhone) {
+    this.workPhone = workPhone;
+    return this;
+  }
+
   @Override
   public String toString() {
     return "ContactData{" +
@@ -140,4 +153,8 @@ public class ContactData {
   public String getGroup() {
     return group;
   }
+
+  public String getMobile() { return  mobile; }
+
+  public String getWorkPhone() { return  workPhone; }
 }

@@ -1,15 +1,14 @@
 package ru.stqa.pft.addressbook.appmanager;
 
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import ru.stqa.pft.addressbook.model.ContactData;
 import ru.stqa.pft.addressbook.model.Contacts;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class ContactHelper extends HelperBase {
 
@@ -32,6 +31,8 @@ public class ContactHelper extends HelperBase {
     type(By.name("company"), contactData.getEmployer1());
     type(By.name("address"), contactData.getAddress());
     type(By.name("home"), contactData.getPhone());
+    type(By.name("mobile"), contactData.getMobile());
+    type(By.name("work"), contactData.getWorkPhone());
     type(By.name("email"), contactData.getEmail());
 
 
@@ -52,6 +53,7 @@ public class ContactHelper extends HelperBase {
     wd.findElement(By.xpath("//img[@alt='Edit']")).click();
 
   }
+
   public void startModifyById(int id) {
     wd.findElement(By.xpath("//a[@href='edit.php?id=" + id + "']")).click();
 
@@ -103,12 +105,12 @@ public class ContactHelper extends HelperBase {
 
 
   public void delete(int index) {
-   find(index);
+    find(index);
     submit();
-   closeModal();
-   verifyDeleted();
-   contactCache = null;
-   goHomeByLink();
+    closeModal();
+    verifyDeleted();
+    contactCache = null;
+    goHomeByLink();
   }
 
   public void delete(ContactData contact) {
@@ -149,8 +151,7 @@ public class ContactHelper extends HelperBase {
   }
 
 
-
-  public List<ContactData> list() {
+ /* public List<ContactData> list() {
     List<ContactData> contacts = new ArrayList<ContactData>();
     List<WebElement> elements = wd.findElements(By.xpath("//*[@name='entry']"));
     for (WebElement element : elements) {
@@ -160,28 +161,46 @@ public class ContactHelper extends HelperBase {
       ContactData contact = new ContactData().withId(id).withName(name).withSurname(surname);
       contacts.add(contact);
     }
-
     return contacts;
+  }*/
 
-  }
   private Contacts contactCache = null;
 
   public Contacts all() {
-    if (contactCache !=null) {
+    if (contactCache != null) {
       return new Contacts(contactCache);
     }
     contactCache = new Contacts();
-    List<WebElement> elements = wd.findElements(By.xpath("//*[@name='entry']"));
-    for (WebElement element : elements) {
-      String name = element.findElement(By.xpath(".//td[3]")).getText();
-      String surname = element.findElement(By.xpath(".//td[2]")).getText();
-      int id = Integer.parseInt(element.findElement(By.tagName("input")).getAttribute("value"));
-      ContactData contact = new ContactData().withId(id).withName(name).withSurname(surname);
+    List<WebElement> rows = wd.findElements(By.name("entry"));
+    for (WebElement row : rows) {
+      List<WebElement> cells = row.findElements(By.tagName("td"));
+      int id = Integer.parseInt(cells.get(0).findElement(By.tagName("input")).getAttribute("value"));
+      String surname = cells.get(1).getText();
+      String name = cells.get(2).getText();
+      String[] phones = cells.get(5).getText().split("\n");
+      ContactData contact = new ContactData().withId(id).withName(name).withSurname(surname).withPhone(phones[0])
+              .withMobile(phones[1]).withWorkPhone(phones[2]);
       contactCache.add(contact);
     }
 
-    return new Contacts((contactCache));
+    return new Contacts(contactCache);
   }
 
 
+  public ContactData infoFromEditForm(ContactData contact) {
+    initContactModificationById(contact.getId());
+    String firstname = wd.findElement(By.name("firstname")).getAttribute("value");
+    String lastname = wd.findElement(By.name("lastname")).getAttribute("value");
+    String home = wd.findElement(By.name("home")).getAttribute("value");
+    String mobile = wd.findElement(By.name("mobile")).getAttribute("value");
+    String work = wd.findElement(By.name("work")).getAttribute("value");
+    wd.navigate().back();
+    return new ContactData().withId(contact.getId())
+            .withName(firstname).withSurname(lastname)
+            .withPhone(home).withMobile(mobile).withWorkPhone(work);
+  }
+
+  private void initContactModificationById(int id) {
+    wd.findElement(By.cssSelector(String.format("a[href='edit.php?id=%s']", id))).click();
+  }
 }

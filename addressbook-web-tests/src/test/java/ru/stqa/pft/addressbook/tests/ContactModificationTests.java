@@ -24,10 +24,9 @@ import static org.testng.Assert.assertTrue;
 public class ContactModificationTests extends TestBase {
 
   @BeforeMethod
-
   public void ensurePreconditions() {
     app.contact().gotoHomepage();
-    if (app.contact().list().size() == 0) {
+    if (app.contact().all().size() == 0) {
       app.contact().create(new ContactData().withName("TestName").withMidName("Contact"), true);
     }
   }

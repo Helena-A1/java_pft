@@ -10,10 +10,10 @@ public class SessionHelper extends HelperBase {
     super(wd);
   }
 
-  public void login(String user, String admin, String pass, String secret, By xpath) {
-    type(By.name(user), admin);
-    type(By.name(pass), secret );
-    click(xpath);
+  public void login(String user, String pass) {
+    wd.findElement(By.name("user")).sendKeys(user);;
+    wd.findElement(By.name("pass")).sendKeys(pass);
+    wd.findElement(By.xpath("//input[@value='Login']")).click();
 
   }
 }

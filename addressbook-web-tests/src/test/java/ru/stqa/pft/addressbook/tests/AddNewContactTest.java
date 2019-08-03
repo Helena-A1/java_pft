@@ -13,12 +13,15 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Properties;
 import java.util.stream.Collectors;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class AddNewContactTest extends TestBase {
+
+
 
   @DataProvider
   public Iterator<Object[]> validContactsFromXml() throws IOException {
@@ -54,7 +57,8 @@ public class AddNewContactTest extends TestBase {
 
 
   @Test(dataProvider = "validContactsFromJson")
-  public void testAddNewContact(ContactData contact) {
+  public void testAddNewContact(ContactData contact) throws IOException {
+
     Contacts before = app.contact().all();
     app.goTo().newContactPage();
     File photo = new File("src\\test\\resources\\Image 4.png");
@@ -71,7 +75,8 @@ public class AddNewContactTest extends TestBase {
 
 
   @Test(enabled = false)
-  public void testBadAddNewContact() {
+  public void testBadAddNewContact()  {
+
     Contacts before = app.contact().all();
     app.goTo().newContactPage();
     ContactData contact = new ContactData()

@@ -39,8 +39,7 @@ public class AddNewContactTest extends TestBase {
 
   @DataProvider
   public Iterator<Object[]> validContactsFromJson() throws IOException {
-
-    BufferedReader reader = new BufferedReader(new FileReader(new File("src/test/resources/contacts.json")));
+    try (BufferedReader reader = new BufferedReader(new FileReader(new File("src/test/resources/contacts.json")))) {
     String json = "";
     String line = reader.readLine();
     while (line != null){
@@ -50,8 +49,9 @@ public class AddNewContactTest extends TestBase {
     Gson gson = new Gson();
     List<ContactData> contacts = gson.fromJson(json, new TypeToken<List<ContactData>>(){}.getType());
     return contacts.stream().map( (g) -> new Object[] {g}).collect(Collectors.toList()).iterator();
+      }
+}
 
-  }
 
   @Test(dataProvider = "validContactsFromJson")
   public void testAddNewContact(ContactData contact) {

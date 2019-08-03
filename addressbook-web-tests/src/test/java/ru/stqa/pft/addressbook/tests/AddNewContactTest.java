@@ -60,8 +60,8 @@ public class AddNewContactTest extends TestBase {
     File photo = new File("src\\test\\resources\\Image 4.png");
 
     app.contact().create(contact, false);
-    app.goTo().gotoHomepage();
     assertThat(app.contact().count(), equalTo(before.size() + 1));
+    app.goTo().gotoHomepage();
     Contacts after = app.contact().all();
     assertThat(after, equalTo(
             before.withAdded(contact.withId(after.stream().mapToInt((c) -> c.getId()).max().getAsInt()))));

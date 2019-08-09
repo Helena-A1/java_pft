@@ -59,14 +59,14 @@ public class AddNewContactTest extends TestBase {
   @Test(dataProvider = "validContactsFromJson")
   public void testAddNewContact(ContactData contact) throws IOException {
 
-    Contacts before = app.contact().all();
+    Contacts before = app.db().contacts();
     app.goTo().newContactPage();
     File photo = new File("src\\test\\resources\\Image 4.png");
 
     app.contact().create(contact, false);
     assertThat(app.contact().count(), equalTo(before.size() + 1));
     app.goTo().gotoHomepage();
-    Contacts after = app.contact().all();
+    Contacts after = app.db().contacts();
     assertThat(after, equalTo(
             before.withAdded(contact.withId(after.stream().mapToInt((c) -> c.getId()).max().getAsInt()))));
 
@@ -77,8 +77,8 @@ public class AddNewContactTest extends TestBase {
   @Test(enabled = false)
   public void testBadAddNewContact()  {
 
-    Contacts before = app.contact().all();
-    app.goTo().newContactPage();
+    Contacts before = app.db().contacts();
+
     ContactData contact = new ContactData()
             .withName("Test2name'")
             .withMidName("Contact")
@@ -90,10 +90,11 @@ public class AddNewContactTest extends TestBase {
             .withPhone("12345678")
             .withEmail("software-testing@gmail.ru")
             .withGroup("test1");
+    app.goTo().newContactPage();
     app.contact().create(contact, false);
     app.goTo().gotoHomepage();
     assertThat(app.contact().count(), equalTo(before.size()));
-    Contacts after = app.contact().all();
+    Contacts after = app.db().contacts();
     assertThat(after, equalTo(before));
   }
 

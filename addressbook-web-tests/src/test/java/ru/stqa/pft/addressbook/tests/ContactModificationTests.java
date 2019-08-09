@@ -25,21 +25,23 @@ public class ContactModificationTests extends TestBase {
 
   @BeforeMethod
   public void ensurePreconditions() {
-    app.contact().gotoHomepage();
-    if (app.contact().all().size() == 0) {
+    if (app.db().contacts().size() == 0) {
+      app.contact().gotoHomepage();
       app.contact().create(new ContactData().withName("TestName").withMidName("Contact"), true);
     }
   }
+
   @Test(enabled = true)
   public void testContactModification() {
 
-    Contacts before = app.contact().all();
+    Contacts before = app.db().contacts();
     ContactData modifiedContact = before.iterator().next();
     ContactData contact = new ContactData()
             .withId(modifiedContact.getId()).withName("Updated TestName").withMidName("Updated Contact").withSurname("Updated Java_pft");
+    app.contact().gotoHomepage();
     app.contact().modify(contact);
     assertThat(app.contact().count(), equalTo(before.size()));
-    Contacts after = app.contact().all();
+    Contacts after = app.db().contacts();
     assertThat(after, equalTo(before.without(modifiedContact).withAdded(contact)));
   }
 

@@ -86,8 +86,7 @@ public class ContactData {
   @Transient
   private String group;
 
-  @Column(name = "photo")
-  @Type(type = "text")
+  @Transient
   private String photo;
 
 
@@ -117,15 +116,12 @@ public class ContactData {
             Objects.equals(workPhone == null ? "" : workPhone, that.workPhone == null ? "" : that.workPhone) &&
             Objects.equals(email == null ? "" : email, that.email == null ? "" : that.email) &&
             Objects.equals(email2 == null ? "" : email2, that.email2 == null ? "" : that.email2) &&
-            Objects.equals(email3 == null ? "" : email3, that.email3 == null ? "" : that.email3) &&
-            Objects.equals(photo == null ? "" : photo, that.photo == null ? "" : that.photo);
-
-
+            Objects.equals(email3 == null ? "" : email3, that.email3 == null ? "" : that.email3);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name, midName, surname, nick, postTitle, employer1, address, phone, mobile, workPhone, email, email2, email3, photo);
+    return Objects.hash(id, name, midName, surname, nick, postTitle, employer1, address, phone, mobile, workPhone, email, email2, email3);
   }
 
   public ContactData withPhoto(File photo) {

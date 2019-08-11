@@ -38,11 +38,11 @@ public class ContactHelper extends HelperBase {
 
 
     if (creation) {
-      try {
-        new Select(wd.findElement(By.name("new_group"))).selectByVisibleText(contactData.getGroup());
-      } catch (Exception e) {
-        new Select(wd.findElement(By.name("new_group"))).selectByIndex(0);
-      }
+     // try {
+      //  new Select(wd.findElement(By.name("new_group"))).selectByVisibleText(contactData.getGroup());
+     // } catch (Exception e) {
+     //   new Select(wd.findElement(By.name("new_group"))).selectByIndex(0);
+     // }
     } else {
       Assert.assertFalse(isElementPresent(By.name("new_group")));
     }
@@ -209,5 +209,39 @@ public class ContactHelper extends HelperBase {
 
   private void initContactModificationById(int id) {
     wd.findElement(By.cssSelector(String.format("a[href='edit.php?id=%s']", id))).click();
+  }
+
+  public void addToGroup(ContactData findContact) {
+    findById(findContact.getId());
+    clickAdd();
+  }
+
+  private void clickAdd() {
+    wd.findElement(By.name("add")).click();
+  }
+
+  public void gotoGroupPage() {
+    wd.findElement(By.xpath("//*[@id=\"content\"]/div/i/a")).click();
+  }
+
+  public void removeFromGroup(ContactData findContact) {
+    gotoGroupPage();
+    findById(findContact.getId());
+    removeContact();
+    gotoHomepage();
+    goToAllGroups();
+
+
+
+  }
+
+  private void goToAllGroups() {
+    wd.findElement(By.name("group")).click();
+    new Select(wd.findElement(By.name("group"))).selectByVisibleText("[all]");
+    wd.findElement(By.name("group")).click();
+  }
+
+  private void removeContact() {
+    wd.findElement(By.name("remove")).click();
   }
 }

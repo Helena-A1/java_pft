@@ -8,6 +8,7 @@ import org.testng.annotations.Test;
 import ru.stqa.pft.addressbook.model.ContactData;
 import ru.stqa.pft.addressbook.model.Contacts;
 import ru.stqa.pft.addressbook.model.GroupData;
+import ru.stqa.pft.addressbook.model.Groups;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -58,7 +59,7 @@ public class AddNewContactTest extends TestBase {
 
   @Test(dataProvider = "validContactsFromJson")
   public void testAddNewContact(ContactData contact) throws IOException {
-
+    Groups groups = app.db().groups();
     Contacts before = app.db().contacts();
     app.goTo().newContactPage();
     File photo = new File("src\\test\\resources\\Image 4.png");
@@ -89,8 +90,8 @@ public class AddNewContactTest extends TestBase {
             .withEmployer1("Software-Testing")
             .withAddress("some address")
             .withPhone("12345678")
-            .withEmail("software-testing@gmail.ru")
-            .withGroup("test1");
+            .withEmail("software-testing@gmail.ru");
+           // .withGroup("test1");
     app.goTo().newContactPage();
     app.contact().create(contact, false);
     app.goTo().gotoHomepage();

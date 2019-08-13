@@ -38,11 +38,11 @@ public class ContactHelper extends HelperBase {
 
 
     if (creation) {
-     // try {
-      //  new Select(wd.findElement(By.name("new_group"))).selectByVisibleText(contactData.getGroup());
-     // } catch (Exception e) {
-     //   new Select(wd.findElement(By.name("new_group"))).selectByIndex(0);
-     // }
+      if (contactData.getGroups().size() > 0) {
+        Assert.assertTrue(contactData.getGroups().size() == 1);
+        new Select(wd.findElement(By.name("new_group"))).selectByVisibleText(contactData.getGroups().iterator().next().getName());
+      }
+
     } else {
       Assert.assertFalse(isElementPresent(By.name("new_group")));
     }
@@ -214,6 +214,19 @@ public class ContactHelper extends HelperBase {
   public void addToGroup(ContactData findContact) {
     findById(findContact.getId());
     clickAdd();
+  }
+
+  public void addToGroup(ContactData findContact, String groupName) {
+    findById(findContact.getId());
+    WebElement select = wd.findElement(By.name("to_group"));
+    List<WebElement> options = select.findElements(By.tagName("option"));
+    for(WebElement option : options){
+      if(option.getText().equals(groupName)) {
+        option.click();
+        break;
+      }
+    }
+    wd.findElement(By.name("add")).click();
   }
 
   private void clickAdd() {

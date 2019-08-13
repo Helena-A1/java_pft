@@ -60,11 +60,13 @@ public class AddNewContactTest extends TestBase {
   @Test(dataProvider = "validContactsFromJson")
   public void testAddNewContact(ContactData contact) throws IOException {
     Groups groups = app.db().groups();
+    File photo = new File("src\\test\\resources\\Image 4.png");
+    ContactData newContact = new ContactData().withName("TestName").withMidName("Contact").inGroup(groups.iterator().next());
     Contacts before = app.db().contacts();
     app.goTo().newContactPage();
-    File photo = new File("src\\test\\resources\\Image 4.png");
 
-    app.contact().create(contact, false);
+
+    app.contact().create(newContact, false);
     assertThat(app.contact().count(), equalTo(before.size() + 1));
     app.goTo().gotoHomepage();
     Contacts after = app.db().contacts();

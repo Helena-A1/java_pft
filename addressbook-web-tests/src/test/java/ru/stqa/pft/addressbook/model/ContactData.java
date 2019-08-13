@@ -285,7 +285,7 @@ public class ContactData {
     return email;
   }
 
-  public Groups getGroups() {
+ public  Groups getGroups() {
     return new Groups(groups);
   }
 
@@ -305,5 +305,10 @@ public class ContactData {
     return email3;
   }
 
+
+  public ContactData inGroup(GroupData group) {
+    groups.add(group);
+    return this;
+  }
 
 }

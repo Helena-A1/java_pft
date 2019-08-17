@@ -8,6 +8,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
 import ru.stqa.pft.mantis.appmanager.ApplicationManager;
 
+import java.io.File;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.stream.Collectors;
@@ -23,11 +24,13 @@ public class TestBase {
   @BeforeSuite(alwaysRun = true)
   public void setUp() throws Exception {
     app.init();
+    app.ftp().upload(new File("C:\\xampp\\htdocs\\mantisbt-2.21.1\\config\\config_inc.php"),  "config_inc.php", "config_inc.php.bak");
 
   }
 
   @AfterSuite(alwaysRun = true)
   public void tearDown() throws Exception {
+    app.ftp().restore("config_inc.php.bak", "config_inc.php");
     app.stop();
   }
 

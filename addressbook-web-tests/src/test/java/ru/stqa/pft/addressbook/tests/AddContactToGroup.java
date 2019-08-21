@@ -6,6 +6,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -28,38 +29,56 @@ import java.util.stream.Collectors;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotEquals;
 
 public class AddContactToGroup extends TestBase {
 
 
-
   @BeforeMethod
   public void ensurePreconditions() {
-    if (app.db().contacts().size() == 0) {
-      Groups groups = app.db().groups();
-      app.contact().gotoHomepage();
-      app.contact().create(new ContactData().withName("TestName").withMidName("Contact"), true);
-    }
+    app.contact().gotoHomepage();
+    ContactData contact = new ContactData().withName("TestName-addContactTest").withSurname("Contact");
+    app.contact().create(contact, true);
 
+    app.goTo().groupPage();
+    app.group().create(new GroupData().withName("test1-addContactTest").withHeader("test-header").withFooter("test-footer"));
   }
+
 
   @Test
   @Transactional
   public void testAddContactToGroup() throws IOException {
-    Groups groups = app.db().groups();
-    GroupData groupData = groups.stream().filter(group -> group.getName().equals("test1-updated")).findFirst().get();
-    long beforeCount = groupData.getContacts().stream().count();
 
-    app.goTo().gotoHomepage();
-    Contacts all = app.contact().all();
-    ContactData contactData = all.stream().findFirst().get();
-    app.contact().addToGroup(contactData, "test1-updated");
+    GroupData groupData = app.db().groups().stream().filter(group -> group.getName().equals("test1-addContactTest")).findFirst().get();
+    ContactData contactData = app.db().contacts().stream().filter(contact -> contact.getName().equals("TestName-addContactTest")).findFirst().get();
 
-    Groups groups2 = app.db().groups();
-    GroupData groupData2 = groups.stream().filter(group -> group.getName().equals("test1-updated")).findFirst().get();
-    long afterCount = groupData.getContacts().stream().count();
+    assertEquals(contactData.getGroups().size(), 0);
 
-    Assert.assertEquals(afterCount, beforeCount + 1);
+    int contactDataId = contactData.getId();
 
+    app.goTo().goHomeByLink();
+    app.contact().addToGroup(contactData, groupData.getName());
+
+    ContactData contact = app.db().contact(contactDataId);
+
+    assertNotEquals(contact.getGroups().size(), 0);
+    assertEquals(contact.getGroups().iterator().next(), groupData);
+  }
+
+
+  @AfterMethod
+  public void afterTest() {
+    ContactData deletedContact = app.db().contacts().stream().filter(contactData -> contactData.getName().equals("TestName-addContactTest")).findFirst().orElse(null);
+    if (deletedContact != null) {
+      app.goTo().goHomeByLink();
+      app.contact().delete(deletedContact);
+    }
+
+    GroupData groupToDelete = app.db().groups().stream().filter(groupData -> groupData.getName().equals("test1-addContactTest")).findFirst().orElse(null);
+    if (groupToDelete != null) {
+      app.goTo().groupPage();
+      app.group().delete(groupToDelete);
+    }
   }
 }

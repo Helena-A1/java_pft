@@ -1,70 +1,56 @@
 package ru.stqa.pft.addressbook.tests;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import ru.stqa.pft.addressbook.model.ContactData;
-import ru.stqa.pft.addressbook.model.Contacts;
 import ru.stqa.pft.addressbook.model.GroupData;
-import ru.stqa.pft.addressbook.model.Groups;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.Iterator;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.testng.Assert.assertEquals;
 
 public class RemoveContactFromGroup extends TestBase {
 
-  @DataProvider
-  public Iterator<Object[]> validContactsFromJson() throws IOException {
-    try (BufferedReader reader = new BufferedReader(new FileReader(new File("src/test/resources/contacts.json")))) {
-      String json = "";
-      String line = reader.readLine();
-      while (line != null) {
-        json += line;
-        line = reader.readLine();
-      }
-      Gson gson = new Gson();
-      List<ContactData> contacts = gson.fromJson(json, new TypeToken<List<ContactData>>() {
-      }.getType());
-      return contacts.stream().map((g) -> new Object[]{g}).collect(Collectors.toList()).iterator();
-    }
-  }
-
   @BeforeMethod
   public void ensurePreconditions() {
-    if (app.db().contacts().size() == 0) {
-      Groups groups = app.db().groups();
-      app.contact().gotoHomepage();
-      app.contact().create(new ContactData().withName("TestName").withMidName("Contact"), true);
-    }
-    if (app.db().groups().size() == 0) {
-      app.group().create(new GroupData().withName("test").withFooter("footer").withHeader("header"));
-      app.goTo().gotoHomepage();
-    }
+    app.contact().gotoHomepage();
+    ContactData contact = new ContactData().withName("TestName-removeContactFromGroup").withSurname("Contact");
+    app.contact().create(contact, true);
+
+    app.goTo().groupPage();
+    app.group().create(new GroupData().withName("test1-removeContactFromGroup").withHeader("test-header").withFooter("test-footer"));
+
+    GroupData groupData = app.db().groups().stream().filter(g -> g.getName().equals("test1-removeContactFromGroup")).findFirst().get();
+    ContactData contactData = app.db().contacts().stream().filter(c -> c.getName().equals("TestName-removeContactFromGroup")).findFirst().get();
+    app.goTo().goHomeByLink();
+    app.contact().addToGroup(contactData, groupData.getName());
   }
 
-  @Test(dataProvider = "validContactsFromJson")
-  public void testRemoveContactFromGroup(ContactData contact) throws IOException {
-    app.goTo().gotoHomepage();
-    Contacts before = app.db().contacts();
-    ContactData findContact = before.iterator().next();
-    ContactData contactAdd = new ContactData()
-            .withId(findContact.getId()).withName("Updated TestName").withMidName("Updated Contact").withSurname("Updated Java_pft");
-    app.contact().addToGroup(contactAdd);
-
-    app.contact().removeFromGroup(contactAdd);
 
 
+  @Test
+  public void testName() {
+    ContactData contactData = app.db().contacts().stream().filter(c -> c.getName().equals("TestName-removeContactFromGroup")).findFirst().get();
+    GroupData groupData = app.db().groups().stream().filter(g -> g.getName().equals("test1-removeContactFromGroup")).findFirst().get();
 
-    assertThat(app.contact().count(), equalTo(before.size()));
+    app.goTo().goHomeByLink();
+    app.contact().removeFromGroup(contactData, groupData);
+
+    ContactData contactDataAfter = app.db().contacts().stream().filter(c -> c.getName().equals("TestName-removeContactFromGroup")).findFirst().get();
+    assertEquals(contactDataAfter.getGroups().size(), 0);
+  }
+
+  @AfterMethod
+  public void afterTest() {
+    ContactData deletedContact = app.db().contacts().stream().filter(contactData -> contactData.getName().equals("TestName-removeContactFromGroup")).findFirst().orElse(null);
+    if (deletedContact != null) {
+      app.goTo().goHomeByLink();
+      app.contact().delete(deletedContact);
+    }
+
+    GroupData groupToDelete = app.db().groups().stream().filter(groupData -> groupData.getName().equals("test1-removeContactFromGroup")).findFirst().orElse(null);
+    if (groupToDelete != null) {
+      app.goTo().groupPage();
+      app.group().delete(groupToDelete);
+    }
   }
 }

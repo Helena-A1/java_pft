@@ -17,23 +17,7 @@ public class GroupData {
   @XStreamOmitField
   @Id
   @Column(name = "group_id")
-  private int id =Integer.MAX_VALUE;
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
-    GroupData groupData = (GroupData) o;
-    return id == groupData.id &&
-            Objects.equals(name, groupData.name) &&
-            Objects.equals(header, groupData.header) &&
-            Objects.equals(footer, groupData.footer);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(id, name, header, footer);
-  }
+  private int id = Integer.MAX_VALUE;
 
   @Expose
   @Column(name = "group_name")
@@ -50,10 +34,11 @@ public class GroupData {
   private String footer;
 
   public Set<ContactData> getContacts() {
-    return contacts = new Contacts();
+    return contacts = new Contacts(contacts);
   }
 
-  @ManyToMany(mappedBy = "groups")
+  @ManyToMany(fetch = FetchType.EAGER)
+  @JoinTable(name = "address_in_groups", joinColumns = @JoinColumn(name = "group_id"), inverseJoinColumns = @JoinColumn(name = "id"))
   private Set<ContactData> contacts = new HashSet<ContactData>();
 
   public int getId() {
@@ -101,5 +86,19 @@ public class GroupData {
             '}';
   }
 
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    GroupData groupData = (GroupData) o;
+    return id == groupData.id &&
+            Objects.equals(name, groupData.name) &&
+            Objects.equals(header, groupData.header) &&
+            Objects.equals(footer, groupData.footer);
+  }
 
+  @Override
+  public int hashCode() {
+    return Objects.hash(id, name, header, footer);
+  }
 }

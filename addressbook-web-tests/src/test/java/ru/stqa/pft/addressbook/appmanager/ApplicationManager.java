@@ -38,6 +38,7 @@ public class ApplicationManager {
 
     properties.load(new FileReader(new File(String.format("src/test/resources/%s.properties", target))));
     if (browser.equals(BrowserType.CHROME)) {
+//      System.setProperty("webdriver.chrome.driver", "C:\\Users\\Alena_Alshevskaya\\Downloads\\Downloads\\Katalon_Studio_Windows_64-5.6.0\\configuration\\resources\\drivers\\chromedriver_win32\\chromedriver.exe");
       wd = new ChromeDriver();
     } else if (browser.equals(BrowserType.FIREFOX)) {
       wd = new FirefoxDriver();

@@ -7,6 +7,7 @@ import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import ru.stqa.pft.addressbook.model.ContactData;
 import ru.stqa.pft.addressbook.model.Contacts;
+import ru.stqa.pft.addressbook.model.GroupData;
 
 import java.util.List;
 
@@ -115,6 +116,7 @@ public class ContactHelper extends HelperBase {
   }
 
   public void delete(ContactData contact) {
+    goToAllGroups();
     findById(contact.getId());
     submit();
     closeModal();
@@ -220,8 +222,8 @@ public class ContactHelper extends HelperBase {
     findById(findContact.getId());
     WebElement select = wd.findElement(By.name("to_group"));
     List<WebElement> options = select.findElements(By.tagName("option"));
-    for(WebElement option : options){
-      if(option.getText().equals(groupName)) {
+    for (WebElement option : options) {
+      if (option.getText().equals(groupName)) {
         option.click();
         break;
       }
@@ -237,15 +239,12 @@ public class ContactHelper extends HelperBase {
     wd.findElement(By.xpath("//*[@id=\"content\"]/div/i/a")).click();
   }
 
-  public void removeFromGroup(ContactData findContact) {
-    gotoGroupPage();
+  public void removeFromGroup(ContactData findContact, GroupData groupData) {
+    WebElement element = wd.findElement(By.name("group"));
+    element.click();
+    new Select(element).selectByVisibleText(groupData.getName());
     findById(findContact.getId());
     removeContact();
-    gotoHomepage();
-    goToAllGroups();
-
-
-
   }
 
   private void goToAllGroups() {

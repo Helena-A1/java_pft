@@ -29,20 +29,23 @@ import java.util.stream.Collectors;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNotEquals;
+import static org.testng.Assert.*;
 
 public class AddContactToGroup extends TestBase {
 
 
   @BeforeMethod
   public void ensurePreconditions() {
-    app.contact().gotoHomepage();
-    ContactData contact = new ContactData().withName("TestName-addContactTest").withSurname("Contact");
-    app.contact().create(contact, true);
+    if (app.db().contacts().size() == 0) {
+      app.contact().gotoHomepage();
+      app.contact().create(new ContactData().withName("TestName-addContactTest").withMidName("Contact"), true);
+    }
 
-    app.goTo().groupPage();
-    app.group().create(new GroupData().withName("test1-addContactTest").withHeader("test-header").withFooter("test-footer"));
+    if (app.db().groups().size() == 0) {
+      app.goTo().groupPage();
+      app.group().create(new GroupData().withName("test1-addContactTest").withHeader("test-header").withFooter("test-footer"));
+    }
+    app.contact().gotoHomepage();
   }
 
 
@@ -50,35 +53,23 @@ public class AddContactToGroup extends TestBase {
   @Transactional
   public void testAddContactToGroup() throws IOException {
 
-    GroupData groupData = app.db().groups().stream().filter(group -> group.getName().equals("test1-addContactTest")).findFirst().get();
-    ContactData contactData = app.db().contacts().stream().filter(contact -> contact.getName().equals("TestName-addContactTest")).findFirst().get();
+    ContactData contactData = app.db().contacts().iterator().next();
+    GroupData groupData = app.db().groups().stream().filter(groupData1 -> !groupData1.getContacts().contains(contactData)).findFirst().orElse(null);
 
-    assertEquals(contactData.getGroups().size(), 0);
+    if (groupData == null) {
+      app.goTo().groupPage();
+      app.group().create(new GroupData().withName("test1-addContactTest").withHeader("test-header").withFooter("test-footer"));
+      groupData = app.db().groups().stream().filter(groupData1 -> groupData1.getName().equals("test1-addContactTest")).filter(groupData1 -> groupData1.getContacts().isEmpty()).findFirst().get();
+    }
 
-    int contactDataId = contactData.getId();
+    int groupSizeBefore = groupData.getContacts().size();
 
     app.goTo().goHomeByLink();
     app.contact().addToGroup(contactData, groupData.getName());
 
-    ContactData contact = app.db().contact(contactDataId);
+    GroupData group = app.db().group(groupData.getId());
 
-    assertNotEquals(contact.getGroups().size(), 0);
-    assertEquals(contact.getGroups().iterator().next(), groupData);
-  }
-
-
-  @AfterMethod
-  public void afterTest() {
-    ContactData deletedContact = app.db().contacts().stream().filter(contactData -> contactData.getName().equals("TestName-addContactTest")).findFirst().orElse(null);
-    if (deletedContact != null) {
-      app.goTo().goHomeByLink();
-      app.contact().delete(deletedContact);
-    }
-
-    GroupData groupToDelete = app.db().groups().stream().filter(groupData -> groupData.getName().equals("test1-addContactTest")).findFirst().orElse(null);
-    if (groupToDelete != null) {
-      app.goTo().groupPage();
-      app.group().delete(groupToDelete);
-    }
+    assertEquals(groupSizeBefore + 1, group.getContacts().size());
+    assertTrue(group.getContacts().contains(contactData));
   }
 }
